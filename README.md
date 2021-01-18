@@ -1,3 +1,5 @@
+[![Build Status](https://dev.azure.com/jeonghun0980/jeonghun/_apis/build/status/leejeonghun.kuffix?branchName=master)](https://dev.azure.com/jeonghun0980/jeonghun/_build/latest?definitionId=1&branchName=master)
+
 # kuffix
 
 it's a frame rate limit unlocker of the Kingdom Under Fire: The Crusaders port for PC, inspired from DSfix.
