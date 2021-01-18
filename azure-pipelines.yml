@@ -1,6 +1,3 @@
-trigger:
-- main
-
 pool:
   vmImage: 'windows-latest'
 
@@ -8,6 +5,8 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'x86'
   buildConfiguration: 'Release'
+  isReleaseTag: $[startsWith(variables['Build.SourceBranch'], 'refs/tags/release-v')]
+  archiveFileName: '$(Build.ArtifactStagingDirectory)/kuffix-$(Build.SourceBranchName).zip'
 
 steps:
 - task: VSBuild@1
@@ -15,3 +14,19 @@ steps:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
+- task: ArchiveFiles@2
+  condition: eq(variables.isReleaseTag, true)
+  inputs:
+    rootFolderOrFile: $(Build.SourcesDirectory)/$(buildConfiguration)/dinput8.dll
+    includeRootFolder: false
+    archiveType: zip
+    archiveFile: $(archiveFileName)
+    replaceExistingArchive: true
+
+- task: GithubRelease@0 
+  condition: eq(variables.isReleaseTag, true)
+  inputs:
+    gitHubConnection: github.com_leejeonghun
+    repositoryName: leejeonghun/kuffix
+    assets: $(archiveFileName)
